@@ -7,10 +7,10 @@
 
         <!-- Titulo -->
         <mxCell id="title" value="Oitavas de Final (F1) — Compra v2 assíncrona com FAN-OUT multi-item" style="text;html=1;fontSize=16;fontStyle=1;align=left;verticalAlign=middle;fontColor=#0072C6;" vertex="1" parent="1">
-          <mxGeometry x="40" y="24" width="980" height="26" as="geometry" />
+          <mxGeometry x="40" y="22" width="980" height="26" as="geometry" />
         </mxCell>
         <mxCell id="subtitle" value="1 POST do carrinho ({userId, items[]}) → N mensagens no Service Bus (fan-out) → N consumidores → N gravações no SQL · rastreio ponta-a-ponta por orderId/correlationId" style="text;html=1;fontSize=11;align=left;verticalAlign=middle;fontColor=#555555;" vertex="1" parent="1">
-          <mxGeometry x="40" y="50" width="1100" height="20" as="geometry" />
+          <mxGeometry x="40" y="48" width="1100" height="20" as="geometry" />
         </mxCell>
 
         <!-- Nodes -->
@@ -42,66 +42,66 @@
           <mxGeometry x="700" y="500" width="50" height="50" as="geometry" />
         </mxCell>
 
-        <!-- Browser <-> Entry: POST (cima) e 202 (baixo) separados -->
-        <mxCell id="e1" value="POST /api/v2/purchase  { userId, items[] }" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" parent="1" source="browser" target="entry">
+        <!-- 1) POST  -->
+        <mxCell id="e1" value="① POST /api/v2/purchase&#10;{ userId, items[] }" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0;" edge="1" parent="1" source="browser" target="entry">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e2ret" value="202 { orderId, correlationIds[] }" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=open;strokeColor=#107C10;fontColor=#107C10;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" parent="1" source="entry" target="browser">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
-        <!-- Entry -> Service Bus: FAN-OUT -->
-        <mxCell id="e3" value="publica N mensagens&#10;(1 por linha — FAN-OUT)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;fontStyle=1;endArrow=block;strokeColor=#0072C6;fontColor=#0072C6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="entry" target="sbus">
+        <!-- 202 retorno -->
+        <mxCell id="e2ret" value="202 { orderId, correlationIds[] }" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=open;strokeColor=#107C10;fontColor=#107C10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=1;entryY=0.7;entryDx=0;entryDy=0;" edge="1" parent="1" source="entry" target="browser">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Service Bus -> Consumers -->
-        <mxCell id="e4" value="entrega" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="sbus" target="consumer1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e5" value="entrega" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="sbus" target="consumerN">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e6" value="falha permanente → DLQ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=block;strokeColor=#D13438;fontColor=#A4262C;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sbus" target="dlq">
+        <!-- 2) FAN-OUT -->
+        <mxCell id="e3" value="② publica N mensagens&#10;(1 por linha — FAN-OUT)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;fontStyle=1;endArrow=block;flowAnimation=1;strokeColor=#0072C6;fontColor=#0072C6;strokeWidth=3;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="entry" target="sbus">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Consumers -> SQL -->
-        <mxCell id="e7" value="INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="consumer1" target="sql">
+        <!-- 3) entrega -->
+        <mxCell id="e4" value="③ entrega" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sbus" target="consumer1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e8" value="INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;" edge="1" parent="1" source="consumerN" target="sql">
+        <mxCell id="e5" value="③ entrega" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="sbus" target="consumerN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="falha permanente → DLQ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=block;flowAnimation=1;strokeColor=#D13438;fontColor=#A4262C;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sbus" target="dlq">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Browser -> Status (GET, vertical) -->
-        <mxCell id="e9" value="GET /api/v2/purchase/{correlationId}  (polling)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="browser" target="status">
+        <!-- 4) INSERT -->
+        <mxCell id="e7" value="④ INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="consumer1" target="sql">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <!-- Status -> SQL (lê status, pela base) -->
-        <mxCell id="e10" value="lê status" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=open;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="status" target="sql">
+        <mxCell id="e8" value="④ INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="consumerN" target="sql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 5) GET status -->
+        <mxCell id="e9" value="⑤ GET /api/v2/purchase/{correlationId}&#10;(polling)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;flowAnimation=1;strokeWidth=2;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="browser" target="status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="lê status" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;dashed=1;endArrow=open;flowAnimation=1;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="status" target="sql">
           <mxGeometry relative="1" as="geometry">
             <Array as="points"><mxPoint x="1285" y="600" /></Array>
           </mxGeometry>
         </mxCell>
 
-        <!-- Telemetria -> App Insights -->
-        <mxCell id="t1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;strokeColor=#68217A;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="entry" target="appi">
+        <!-- 6) Telemetria -->
+        <mxCell id="t1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;flowAnimation=1;strokeColor=#68217A;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="entry" target="appi">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="t2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;strokeColor=#68217A;" edge="1" parent="1" source="consumer1" target="appi">
+        <mxCell id="t2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;flowAnimation=1;strokeColor=#68217A;" edge="1" parent="1" source="consumer1" target="appi">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="t3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;strokeColor=#68217A;" edge="1" parent="1" source="consumerN" target="appi">
+        <mxCell id="t3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;dashed=1;endArrow=open;flowAnimation=1;strokeColor=#68217A;" edge="1" parent="1" source="consumerN" target="appi">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="t4" value="telemetria" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=9;dashed=1;endArrow=open;strokeColor=#68217A;fontColor=#68217A;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="status" target="appi">
+        <mxCell id="t4" value="⑥ telemetria" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=9;dashed=1;endArrow=open;flowAnimation=1;strokeColor=#68217A;fontColor=#68217A;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="status" target="appi">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
         <!-- Legenda -->
-        <mxCell id="legend" value="Legenda:   azul = fan-out (1→N)   ·   verde tracejado = resposta 202   ·   vermelho = DLQ (poison)   ·   roxo tracejado = telemetria (App Insights)" style="text;html=1;fontSize=10;align=left;verticalAlign=middle;fontColor=#555555;" vertex="1" parent="1">
-          <mxGeometry x="40" y="630" width="1100" height="20" as="geometry" />
+        <mxCell id="legend" value="Fluxo (animado):  ① POST → ② FAN-OUT (1→N) → ③ entrega → ④ INSERT  ·  ⑤ polling de status  ·  ⑥ telemetria (App Insights)  ·  vermelho = DLQ (poison)" style="text;html=1;fontSize=10;align=left;verticalAlign=middle;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="40" y="630" width="1200" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
